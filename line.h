@@ -2,6 +2,8 @@
 
 #include "raylib.hpp"
 
+// a collision struct, that the line will return when it runs collision with another line
+// just to make it easier to send "data" over functions
 struct collision {
 	bool didCollide;
 	float collisionX = 0;
@@ -11,8 +13,10 @@ struct collision {
 		:didCollide{ didCollide }, collisionX{ collisionX }, collisionY{ collisionY } {};
 };
 
+// a line struct, used to simplyfy the porcess of multiple things in the program
 struct line {
 private:
+	// the start and end 2d positions of the line
 	float startX;
 	float startY;
 
@@ -23,13 +27,16 @@ public:
 	line(float startX, float startY, float endX, float endY)
 		:startX{ startX }, startY{ startY }, endX{ endX }, endY{ endY } {};
 
+	// get the distance from one 2D point to this lines center
 	float DistanceFromCenter(float x, float y) {
 		float pX = (startX + endX) / 2.0f;
 		float pY = (startY + endY) / 2.0f;
 
+		// Pythagoras:
 		return sqrt(pow((x - pX), 2) + pow((y - pY), 2));
 	}
 
+	// Draw funktion from raylib, to show the line.
 	void Draw(Color c = BLACK) {
 		DrawLine(startX, startY, endX, endY, c);
 	}

@@ -7,13 +7,13 @@
 #include "Edge.h"
 
 class Layer {
+public:
 	Perceptron* perceptrons;
 	Edge* edges;
 
 	size_t perceptronsSize;
 	size_t edgesSize;
-	
-public:
+
 	/// <summary> Constructor for the Layer class</summary>
 	/// <param name="perceptronCount"> The amount of perceptrons to have in this layer </param>
 	/// <returns>  </returns>
@@ -55,7 +55,7 @@ public:
 
 	std::vector<float> GetValues() {
 		std::vector<float> retVal;
-		
+
 		for (int i = 0; i < perceptronsSize; i++) {
 			retVal.push_back(perceptrons[i].outValue);
 		}
@@ -67,6 +67,34 @@ public:
 		for (int perceptronIDX = 0; perceptronIDX < perceptronsSize; perceptronIDX++) {
 			Perceptron& myPerceptron = perceptrons[perceptronIDX];
 			myPerceptron.calculateInValue();
+		}
+	}
+
+	void CopyLayerIntoThis(Layer otherLayer, bool isLastLayer) {
+		for (int perceptronIDX = 0; perceptronIDX < perceptronsSize; perceptronIDX++) {
+			Perceptron& myPerceptron = perceptrons[perceptronIDX];
+			myPerceptron.bias = otherLayer.perceptrons[perceptronIDX].bias;
+		}
+
+		if (!isLastLayer) {
+			for (int edgesIDX = 0; edgesIDX < edgesSize; edgesIDX++) {
+				Edge& myEdge = edges[edgesIDX];
+				myEdge.weight = otherLayer.edges[edgesIDX].weight;
+			}
+		}
+	}
+
+	void Mutate(bool isLastLayer) {
+		for (int perceptronIDX = 0; perceptronIDX < perceptronsSize; perceptronIDX++) {
+			Perceptron& myPerceptron = perceptrons[perceptronIDX];
+			myPerceptron.bias += (((float)rand() / RAND_MAX) - 0.5f)/100.0f;
+		}
+
+		if (!isLastLayer) {
+			for (int edgesIDX = 0; edgesIDX < edgesSize; edgesIDX++) {
+				Edge& myEdge = edges[edgesIDX];
+				myEdge.weight += (((float)rand() / RAND_MAX) - 0.5f)/5.0f;
+			}
 		}
 	}
 };

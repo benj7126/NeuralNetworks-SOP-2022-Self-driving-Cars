@@ -11,15 +11,17 @@ class Perceptron {
 	std::vector<Edge*> edgeIn;
 	std::vector<Edge*> edgeOut;
 
-	void sigmoid() {
-		// need to add sigmoid
-		outValue = inValue;
+	void Sigmoid() {
+		// 1/(1+e^(-x))
+		outValue = 1 / (1 + exp((double)-inValue));
 	}
 
 public:
 	float inValue; // value of sum of previous layer
 	float outValue; // value of inValue, after aktivation function has been run
-	float bias = -1;
+	float bias = 0;
+
+	Perceptron() {}
 
 	void linkIn(Edge* e) {
 		edgeIn.push_back(e);
@@ -40,6 +42,6 @@ public:
 			inValue += otherPerceptron->outValue * e->weight;
 		}
 
-		sigmoid();
+		Sigmoid();
 	}
 };

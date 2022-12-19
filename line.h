@@ -20,11 +20,18 @@ private:
 	float endY;
 
 public:
-	line(float startX, float startY, float endX, float endY, bool useAI = true)
+	line(float startX, float startY, float endX, float endY)
 		:startX{ startX }, startY{ startY }, endX{ endX }, endY{ endY } {};
 
-	void Draw() {
-		DrawLine(startX, startY, endX, endY, BLACK);
+	float DistanceFromCenter(float x, float y) {
+		float pX = (startX + endX) / 2.0f;
+		float pY = (startY + endY) / 2.0f;
+
+		return sqrt(pow((x - pX), 2) + pow((y - pY), 2));
+	}
+
+	void Draw(Color c = BLACK) {
+		DrawLine(startX, startY, endX, endY, c);
 	}
 
 	// Collision code was taken from

@@ -26,9 +26,6 @@ public:
 	float outValue; // value of inValue, after aktivation function has been run
 	float bias = 0; // value representing the importance of this perceptron
 
-	// default constructor
-	Perceptron() {}
-
 	// link an edge pointer with this perceptron on this perceptrons left side
 	void linkIn(Edge* e) {
 		edgeIn.push_back(e);

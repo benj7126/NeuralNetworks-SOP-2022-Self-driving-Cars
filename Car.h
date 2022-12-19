@@ -16,6 +16,8 @@ private:
 	int points = 0; // cur checkpoint
 	int checkpointTimer = 160; // updates pr checkpoint untill suicide...
 
+	int* bestScore;
+
 	float lastDist = 0;
 
 	float w = 10; // width of car
@@ -106,7 +108,7 @@ public:
 	// 2: how much to rotate left
 	// 3: how much to rotate right
 
-	Car(float x, float y, bool useAI = true) : nn{ {8, 7, 4, 3} }, x{ x }, y{ y }, useAI{ useAI } {}
+	Car(float x, float y, bool useAI = true, int* bestScore = nullptr) : nn{ {8, 7, 4, 3} }, x{ x }, y{ y }, useAI{ useAI }, bestScore{ bestScore } {}
 
 	void UpdateCar() {
 		if (useAI)
@@ -134,6 +136,16 @@ public:
 				checkpointTimer = 160;
 
 				points++;
+				if (bestScore != nullptr)
+					if (points > *bestScore) {
+						std::cout << std::endl << "New best score: " << points << std::endl;
+
+						int laps = (int)(points - (points % m->checkpointLines.size())) / m->checkpointLines.size();
+
+						std::cout << "For a total of: " << laps << std::endl << std::endl;
+
+						*bestScore = points;
+					}
 
 				checkpoint++;
 				if (checkpoint == m->checkpointLines.size())
@@ -167,7 +179,7 @@ public:
 			r += result[1]; // 0.1 - 0
 
 		if (result[2] > 0.1f) // only rotate if over 0.1
-			r -= result[2]; // 1 - 0
+			r -= result[2]; // 0.1 - 0
 
 		curSpeed *= 0.9;
 
